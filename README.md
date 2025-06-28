@@ -34,3 +34,58 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+## Structure //Todo
+
+studygroup-plus/
+├── public/
+│   ├── images/
+│   └── icons/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/
+│   │   │   ├── login/
+│   │   │   │   └── page.tsx // done 
+│   │   │   └── signup/
+│   │   │       └── page.tsx // done
+│   │   ├── dashboard/
+│   │   │   └── page.tsx
+│   │   ├── create/
+│   │   │   └── page.tsx
+│   │   ├── group/
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx           ← group overview
+│   │   │       ├── notes/             ← notes tab
+│   │   │       ├── chat/              ← chat tab
+│   │   │       └── jam/               ← break / mini games
+│   │   ├── discover/
+│   │   │   └── page.tsx               ← discover all groups + filter by:
+│   │   │                               university / exam / topic
+│   │   ├── profile/
+│   │   │   └── page.tsx
+│   │   ├── api/
+│   │   │   ├── auth/
+│   │   │   │   ├── login/
+│   │   │   │   │   └── route.ts
+│   │   │   │   └── signup/
+│   │   │   │       └── route.ts
+│   │   │   └── groups/                ← future: group CRUD
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx                   ← landing page // for now done 
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── auth/
+│   │   ├── dashboard/
+│   │   ├── group/
+│   │   └── common/                    // navbar done for now..
+│   ├── lib/
+│   │   ├── mongodb.ts                 ← MongoDB helper
+│   │   ├── auth.ts                    ← optional, e.g. JWT helpers
+│   │   └── utils.ts
+│   └── types/
+│       └── index.ts
+├── .env.local                          ← contains MONGODB_URI
+├── package.json
+└── README.md

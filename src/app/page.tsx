@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { Users, BookOpen, MessageCircle, Brain, Calendar, Share2, Sparkles, GraduationCap } from "lucide-react";
+import Navbar from "./components/Navbar"; 
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Add the Navbar component */}
+      <Navbar isAuthenticated={false} />
+      
       <section className="relative px-4 py-20 sm:py-32">
         <div className="absolute inset-0 opacity-25">
           <div className="absolute top-20 left-20 text-blue-600">
