@@ -47,10 +47,14 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (data.success) {
+        // Store user data in localStorage for session management
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('isAuthenticated', 'true');
+        
         setSuccess('Login successful! Redirecting...');
         setTimeout(() => {
-          router.push('/');
-        }, 1500);
+          router.push('/dashboard');
+        }, 1000);
       } else {
         setError(data.message || 'Login failed');
       }
