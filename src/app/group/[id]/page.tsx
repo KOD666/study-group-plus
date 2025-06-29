@@ -95,7 +95,6 @@ export default function GroupDetailPage() {
         }
       } catch (error) {
         console.error('Error parsing user data:', error);
-        // Clear corrupted data
         localStorage.removeItem('isAuthenticated');
         localStorage.removeItem('user');
         router.push('/login');
@@ -226,8 +225,7 @@ export default function GroupDetailPage() {
       </div>
     );
   }
-
-  // Check if user is a member of the group
+  
   if (!isGroupMember()) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
@@ -516,7 +514,7 @@ export default function GroupDetailPage() {
                   </button>
                 </div>
               </div>
-              
+
             </div>
           </div>
         </div>
