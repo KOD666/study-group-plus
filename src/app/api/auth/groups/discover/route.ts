@@ -2,21 +2,35 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/app/lib/mongodb';
 import { Db } from 'mongodb';
 
+// Define proper type for MongoDB filter
+interface GroupFilter {
+  isActive: boolean;
+  $or?: Array<{
+    name?: { $regex: RegExp };
+    subject?: { $regex: RegExp };
+    description?: { $regex: RegExp };
+    tags?: { $in: RegExp[] };
+  }>;
+  subject?: string;
+}
+
 export async function GET(request: NextRequest) {
   try {
-    
     const db: Db = await getDatabase();
     
+    // Get query parameters for filtering
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search');
     const subject = searchParams.get('subject');
     const limit = parseInt(searchParams.get('limit') || '50');
     const skip = parseInt(searchParams.get('skip') || '0');
 
-    const filter: any = {
-      isActive: true 
+    // Build the query filter with proper typing
+    const filter: GroupFilter = {
+      isActive: true // Only show active groups
     };
 
+    // Add search filter if provided
     if (search && search.trim()) {
       const searchRegex = new RegExp(search.trim(), 'i');
       filter.$or = [
@@ -27,6 +41,7 @@ export async function GET(request: NextRequest) {
       ];
     }
 
+    // Add subject filter if provided
     if (subject && subject.trim()) {
       filter.subject = subject.trim();
     }
@@ -35,14 +50,15 @@ export async function GET(request: NextRequest) {
     const groups = await db
       .collection('groups')
       .find(filter)
-      .sort({ createdAt: -1 }) 
+      .sort({ createdAt: -1 }) // Sort by newest first
       .skip(skip)
-      .limit(Math.min(limit, 100)) 
+      .limit(Math.min(limit, 100)) // Cap limit at 100
       .toArray();
 
-    
+    // Get total count for pagination
     const totalCount = await db.collection('groups').countDocuments(filter);
 
+    // Transform groups to match expected interface
     const transformedGroups = groups.map(group => ({
       _id: group._id.toString(),
       name: group.name,

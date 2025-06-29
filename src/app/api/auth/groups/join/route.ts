@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { groupCode, userId } = body;
 
+    // Validate required fields
     if (!groupCode || !userId) {
       return NextResponse.json(
         { success: false, message: 'Group code and user ID are required' },
@@ -14,6 +15,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate group code format (should be 6 characters)
     if (typeof groupCode !== 'string' || groupCode.trim().length !== 6) {
       return NextResponse.json(
         { success: false, message: 'Invalid group code format' },
@@ -21,8 +23,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Connect to database
     const db: Db = await getDatabase();
     
+    // Find the group by group code
     const group = await db.collection('groups').findOne({ 
       groupCode: groupCode.trim().toUpperCase(),
       isActive: true 
@@ -35,6 +39,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if user is already a member
     if (group.members && group.members.includes(userId)) {
       return NextResponse.json(
         { success: false, message: 'You are already a member of this group' },
@@ -42,6 +47,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Add user to the group's members array
     const result = await db.collection('groups').updateOne(
       { _id: group._id },
       { 
@@ -60,6 +66,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Return success response with group info
     return NextResponse.json({
       success: true,
       message: 'Successfully joined the group',
@@ -82,6 +89,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// Handle unsupported methods
 export async function GET() {
   return NextResponse.json(
     { success: false, message: 'Method not allowed' },

@@ -85,7 +85,8 @@ export default function DiscoverGroups() {
 
   const fetchAllGroups = async () => {
     try {
-      const response = await fetch('/api/groups/discover');
+      // Fixed API path to match your route structure
+      const response = await fetch('/api/auth/groups/discover');
       const data = await response.json();
       
       if (data.success) {
@@ -108,7 +109,8 @@ export default function DiscoverGroups() {
     setJoinSuccess('');
 
     try {
-      const response = await fetch('/api/groups/join', {
+      // Fixed API path to match your route structure
+      const response = await fetch('/api/auth/groups/join', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,12 +126,17 @@ export default function DiscoverGroups() {
       if (data.success) {
         setJoinSuccess('Successfully joined the group!');
         fetchAllGroups();
+        // Clear success message after 3 seconds
+        setTimeout(() => setJoinSuccess(''), 3000);
       } else {
         setJoinError(data.message || 'Failed to join group');
+        // Clear error message after 5 seconds
+        setTimeout(() => setJoinError(''), 5000);
       }
     } catch (error) {
       console.error('Error joining group:', error);
       setJoinError('Network error. Please try again.');
+      setTimeout(() => setJoinError(''), 5000);
     } finally {
       setIsJoining(null);
     }

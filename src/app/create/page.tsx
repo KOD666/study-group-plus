@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import { Users, ArrowLeft, Plus, BookOpen, Tag , FileText } from "lucide-react";
+import { Users, ArrowLeft, Plus, BookOpen, Tag, FileText } from "lucide-react";
 
 interface UserData {
   id: string;
@@ -70,7 +70,7 @@ export default function CreateGroup() {
     setSuccess('');
 
     try {
-      const response = await fetch('/api/groups/create', {
+      const response = await fetch('/api/auth/groups/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,6 +119,7 @@ export default function CreateGroup() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -141,6 +142,7 @@ export default function CreateGroup() {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
         <div className="text-center mb-8">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center shadow-lg">
             <Plus className="text-white" size={32} />
@@ -154,6 +156,7 @@ export default function CreateGroup() {
           </p>
         </div>
 
+        {/* Create Form */}
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
             {error && (
@@ -169,6 +172,7 @@ export default function CreateGroup() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Group Title */}
               <div>
                 <label htmlFor="title" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
                   <BookOpen size={16} />
@@ -187,6 +191,7 @@ export default function CreateGroup() {
                 />
               </div>
 
+              {/* Subject */}
               <div>
                 <label htmlFor="subject" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
                   <BookOpen size={16} />
@@ -205,6 +210,7 @@ export default function CreateGroup() {
                 />
               </div>
 
+              {/* Tags */}
               <div>
                 <label htmlFor="tags" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
                   <Tag size={16} />
@@ -225,6 +231,7 @@ export default function CreateGroup() {
                 </p>
               </div>
 
+              {/* Description */}
               <div>
                 <label htmlFor="description" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
                   <FileText size={16} />
@@ -245,6 +252,7 @@ export default function CreateGroup() {
                 </p>
               </div>
 
+              {/* Submit Button */}
               <div className="pt-6">
                 <button
                   type="submit"
@@ -266,7 +274,8 @@ export default function CreateGroup() {
               </div>
             </form>
           </div>
-          
+
+          {/* Tips Section */}
           <div className="mt-8 bg-blue-50 rounded-2xl p-6 border border-blue-100">
             <h3 className="text-lg font-semibold text-blue-900 mb-3">
               💡 Tips for a Successful Study Group

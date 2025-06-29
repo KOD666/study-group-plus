@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/app/lib/mongodb';
 import { Db } from 'mongodb';
 
-
+// Generate a unique group code
 function generateGroupCode(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
@@ -12,11 +12,13 @@ function generateGroupCode(): string {
   return result;
 }
 
+// Check if group code is unique
 async function isGroupCodeUnique(db: Db, code: string): Promise<boolean> {
   const existingGroup = await db.collection('groups').findOne({ groupCode: code });
   return !existingGroup;
 }
 
+// Generate a unique group code
 async function generateUniqueGroupCode(db: Db): Promise<string> {
   let code = generateGroupCode();
   let attempts = 0;
@@ -30,6 +32,7 @@ async function generateUniqueGroupCode(db: Db): Promise<string> {
     attempts++;
   }
   
+  // If we can't generate a unique code after 10 attempts, use timestamp
   return generateGroupCode() + Date.now().toString().slice(-3);
 }
 
@@ -38,6 +41,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { title, subject, tags, description, createdBy } = body;
 
+    // Validate required fields
     if (!title || !subject || !createdBy) {
       return NextResponse.json(
         { success: false, message: 'Title, subject, and user ID are required' },
@@ -45,6 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate title and subject length
     if (title.trim().length < 3) {
       return NextResponse.json(
         { success: false, message: 'Group title must be at least 3 characters long' },
@@ -59,10 +64,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Connect to database
     const db = await getDatabase();
     
+    // Generate unique group code
     const groupCode = await generateUniqueGroupCode(db);
 
+    // Process tags - convert comma-separated string to array
     let tagsArray: string[] = [];
     if (tags && tags.trim()) {
       tagsArray = tags
@@ -72,13 +80,14 @@ export async function POST(request: NextRequest) {
         .slice(0, 10); // Limit to 10 tags
     }
 
+    // Create the group document
     const groupDocument = {
       name: title.trim(),
       subject: subject.trim(),
       tags: tagsArray,
       description: description?.trim() || '',
       createdBy: createdBy,
-      members: [createdBy], 
+      members: [createdBy], // Creator is automatically a member
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       groupCode: groupCode,
@@ -86,6 +95,7 @@ export async function POST(request: NextRequest) {
       memberCount: 1
     };
 
+    // Insert the group into the database
     const result = await db.collection('groups').insertOne(groupDocument);
 
     if (!result.insertedId) {
@@ -95,6 +105,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Return success response with group ID
     return NextResponse.json({
       success: true,
       message: 'Group created successfully',
@@ -114,6 +125,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating group:', error);
     
+    // Handle specific MongoDB errors
     if (error instanceof Error) {
       if (error.message.includes('duplicate key')) {
         return NextResponse.json(
@@ -130,6 +142,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// Handle unsupported methods
 export async function GET() {
   return NextResponse.json(
     { success: false, message: 'Method not allowed' },
