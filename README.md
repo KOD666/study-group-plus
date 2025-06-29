@@ -30,6 +30,8 @@
 
 🎨 Clean, responsive UI
 
+---
+
 🧰 Tech Stack
 Frontend: Next.js, React.js, Tailwind CSS
 
@@ -38,6 +40,8 @@ Backend & Database: Node.js, MongoDB (via Next.js API routes)
 Authentication: NextAuth.js
 
 Other: Git & GitHub (version control)
+
+---
 
 🚀 How It Works
 Sign Up / Login to your account.
@@ -57,6 +61,8 @@ Inside each group:
 💬 Chat with other members in real time.
 
 Profile page to view and update your info.
+
+---
 
 🏫 Why It Matters
 Helps students connect with peers studying similar subjects.
@@ -82,9 +88,13 @@ Enhanced student engagement and community building.
 
 Learn modern full-stack development, Git/GitHub workflows, and open source collaboration.
 
+---
+
 🤝 Contributing
 We welcome ideas, code contributions, bug reports, and discussions!
 Whether you're a student, developer, or educator — help us make collaborative learning better.
+
+---
 
 📚 Final Thoughts
 Study Group Connector bridges the gap between technology and education by making study groups accessible, interactive, and impactful.
