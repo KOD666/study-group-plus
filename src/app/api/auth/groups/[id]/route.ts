@@ -2,42 +2,100 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/app/lib/mongodb';
 import { Db, ObjectId } from 'mongodb';
 
-// interface GroupMember {
-//   _id: string;
-//   name: string;
-//   email: string;
-//   joinedAt?: string;
-// }
+interface GroupMember {
+  _id: string;
+  name: string;
+  email: string;
+  joinedAt?: string;
+}
 
-// interface GroupNote {
-//   _id: string;
-//   title: string;
-//   uploadedBy: {
-//     name: string;
-//     email: string;
-//   };
-//   uploadedAt: string;
-//   fileUrl?: string;
-// }
+interface GroupNote {
+  _id: string;
+  title: string;
+  uploadedBy: {
+    name: string;
+    email: string;
+  };
+  uploadedAt: string;
+  fileUrl?: string;
+}
 
-// interface GroupMessage {
-//   _id: string;
-//   message: string;
-//   sender: {
-//     name: string;
-//     email: string;
-//   };
-//   sentAt: string;
-// }
+interface GroupMessage {
+  _id: string;
+  message: string;
+  sender: {
+    name: string;
+    email: string;
+  };
+  sentAt: string;
+}
+
+interface GroupDetails {
+  _id: ObjectId;
+  name: string;
+  subject: string;
+  description: string;
+  tags: string[];
+  createdBy: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  members: GroupMember[];
+  createdAt: string;
+  updatedAt: string;
+  groupCode: string;
+  memberCount: number;
+  isActive: boolean;
+  notes: GroupNote[];
+  messages: GroupMessage[];
+}
+
+interface UpdateGroupData {
+  updatedAt: string;
+  name?: string;
+  subject?: string;
+  description?: string;
+  tags?: string[];
+}
+
+interface UpdateRequestBody {
+  name?: string;
+  subject?: string;
+  description?: string;
+  tags?: string;
+  userId: string;
+}
+
+interface UserDocument {
+  _id: ObjectId;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
+interface GroupDocument {
+  _id: ObjectId;
+  name: string;
+  subject: string;
+  description: string;
+  tags: string[];
+  createdBy: string | ObjectId;
+  members: (string | ObjectId)[];
+  createdAt: string;
+  updatedAt: string;
+  groupCode: string;
+  isActive: boolean;
+}
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
-    console.log('GET /api/auth/groups/[id] - ID received:', id); // Debug log
+    console.log('GET /api/auth/groups/[id] - ID received:', id);
 
     if (!id || typeof id !== 'string') {
       console.log('Invalid ID format:', id);
@@ -171,23 +229,22 @@ export async function GET(
       );
     }
 
-    const group = groupAggregation[0];
-
+    const group = groupAggregation[0] as GroupDetails;
     if (!group.members || group.members.length === 0) {
       const groupData = await db.collection('groups').findOne({
         _id: new ObjectId(id),
         isActive: true
-      });
+      }) as GroupDocument | null;
 
       if (groupData && groupData.members && groupData.members.length > 0) {
-        const memberIds = groupData.members.map((memberId: string) =>
+        const memberIds = groupData.members.map((memberId: string | ObjectId) =>
           typeof memberId === 'string' ? new ObjectId(memberId) : memberId
         );
 
         const memberDetails = await db.collection('users')
           .find({ _id: { $in: memberIds } })
           .project({ _id: 1, name: 1, email: 1, createdAt: 1 })
-          .toArray();
+          .toArray() as UserDocument[];
 
         group.members = memberDetails.map(member => ({
           _id: member._id.toString(),
@@ -202,7 +259,7 @@ export async function GET(
       const groupData = await db.collection('groups').findOne({
         _id: new ObjectId(id),
         isActive: true
-      });
+      }) as GroupDocument | null;
 
       if (groupData && groupData.createdBy) {
         const creatorId = typeof groupData.createdBy === 'string'
@@ -210,7 +267,7 @@ export async function GET(
           : groupData.createdBy;
 
         const creatorDetails = await db.collection('users')
-          .findOne({ _id: creatorId });
+          .findOne({ _id: creatorId }) as UserDocument | null;
 
         if (creatorDetails) {
           group.createdBy = {
@@ -232,15 +289,15 @@ export async function GET(
         ...group.createdBy,
         _id: group.createdBy._id.toString()
       },
-      members: group.members.map((member: any) => ({
+      members: group.members.map((member: GroupMember) => ({
         ...member,
         _id: member._id.toString()
       })),
-      notes: group.notes.map((note: any) => ({
+      notes: group.notes.map((note: GroupNote) => ({
         ...note,
         _id: note._id.toString()
       })),
-      messages: group.messages.map((message: any) => ({
+      messages: group.messages.map((message: GroupMessage) => ({
         ...message,
         _id: message._id.toString()
       }))
@@ -276,7 +333,7 @@ export async function PUT(
 ) {
   try {
     const { id } = params;
-    const body = await request.json();
+    const body = await request.json() as UpdateRequestBody;
     const { name, subject, description, tags, userId } = body;
 
     if (!userId) {
@@ -308,7 +365,7 @@ export async function PUT(
       );
     }
 
-    const updateData: any = {
+    const updateData: UpdateGroupData = {
       updatedAt: new Date().toISOString()
     };
 
