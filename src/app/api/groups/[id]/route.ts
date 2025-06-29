@@ -59,7 +59,7 @@ export async function GET(
             .toArray();
 
           memberDetails.push(...members.map(member => ({
-            id: member._id.toString(),
+            _id: member._id.toString(),
             name: member.name || member.email || 'Unknown User',
             email: member.email || 'No email',
             joinedAt: member.createdAt || new Date().toISOString()
@@ -79,7 +79,7 @@ export async function GET(
         .toArray();
 
       notes = groupNotes.map(note => ({
-        id: note._id.toString(),
+        _id: note._id.toString(),
         title: note.title || 'Untitled Note',
         content: note.content || '',
         uploadedBy: note.uploadedBy,
@@ -93,7 +93,7 @@ export async function GET(
     }
 
     const transformedGroup = {
-      id: group._id.toString(),
+      _id: group._id.toString(),
       name: group.name,
       subject: group.subject,
       description: group.description || '',
@@ -107,13 +107,15 @@ export async function GET(
       isActive: group.isActive,
       memberCount: (group.members || []).length,
       noteCount: notes.length,
+      groupCode: group.groupCode,
+      notes: notes
     };
 
     return NextResponse.json(
       { 
         success: true, 
         message: 'Group retrieved successfully',
-        data: transformedGroup 
+        group: transformedGroup  // Changed from 'data' to 'group' to match frontend expectation
       },
       { status: 200 }
     );

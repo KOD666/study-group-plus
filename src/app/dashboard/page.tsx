@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import { Users, Plus, Calendar, BookOpen, LogOut, User, Globe, Copy, Check } from "lucide-react";
+import { Users, Plus, Calendar, BookOpen, LogOut, User, Globe, Copy, Check, ArrowRight } from "lucide-react";
 
 interface UserData {
   id: string;
@@ -127,6 +127,10 @@ export default function Dashboard() {
     }
   };
 
+  const navigateToGroup = (groupId: string) => {
+    router.push(`/group/${groupId}`);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
@@ -246,7 +250,8 @@ export default function Dashboard() {
                   {groups.map((group) => (
                     <div
                       key={group._id}
-                      className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100"
+                      className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 cursor-pointer group"
+                      onClick={() => navigateToGroup(group._id)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-4 flex-1">
@@ -254,7 +259,9 @@ export default function Dashboard() {
                             <BookOpen className="text-white" size={20} />
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">{group.name}</h3>
+                            <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                              {group.name}
+                            </h3>
                             <p className="text-blue-600 font-medium mb-2">{group.subject}</p>
                             <p className="text-gray-600 text-sm mb-3">{group.description}</p>
                             <div className="flex items-center space-x-4 text-sm text-gray-500">
@@ -271,7 +278,10 @@ export default function Dashboard() {
                         </div>
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => copyGroupCode(group.groupCode)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              copyGroupCode(group.groupCode);
+                            }}
                             className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                           >
                             {copiedCode === group.groupCode ? (
@@ -286,6 +296,9 @@ export default function Dashboard() {
                               </>
                             )}
                           </button>
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                            <ArrowRight size={20} className="text-gray-400" />
+                          </div>
                         </div>
                       </div>
                     </div>
