@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from "next/link";
-import { Users, BookOpen, Calendar, Copy, Check, ArrowLeft, Tag, User,FileText ,Send ,MessageCircle, Clock ,Mail ,Crown } from "lucide-react";
+import { Users, BookOpen, Calendar, Copy, Check, ArrowLeft, Tag, User, FileText, Send, MessageCircle, Clock, Mail, Crown } from "lucide-react";
 
 interface UserData {
   id: string;
@@ -73,8 +73,13 @@ export default function GroupDetailPage() {
   const params = useParams();
   const groupId = params?.id as string;
 
+
   useEffect(() => {
-    const checkAuth = () => {
+  const checkAuth = () => {
+    // Prevent SSR issues
+    if (typeof window === 'undefined') return;
+    
+    try {
       const isAuthenticated = localStorage.getItem('isAuthenticated');
       const userData = localStorage.getItem('user');
       
@@ -83,39 +88,54 @@ export default function GroupDetailPage() {
         return;
       }
 
-      try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-        if (groupId) {
-          fetchGroupDetails(groupId);
-        }
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        router.push('/login');
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      
+      if (groupId) {
+        fetchGroupDetails(groupId);
       }
-    };
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      // Clear corrupted data
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('user');
+      router.push('/login');
+    }
+  };
 
-    checkAuth();
-  }, [router, groupId]);
+  checkAuth();
+}, [router, groupId]);
 
   const fetchGroupDetails = async (id: string) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/groups/${id}`);
-      const data = await response.json();
+      setError(''); // Clear previous errors
       
-      if (data.success) {
-        setGroup(data.group);
-      } else {
-        setError(data.message || 'Failed to fetch group details');
-      }
-    } catch (error) {
-      console.error('Error fetching group details:', error);
-      setError('Network error. Please try again.');
-    } finally {
-      setIsLoading(false);
+      const fetchGroupDetails = async (id: string) => {
+  try {
+    setIsLoading(true);
+    setError(''); // Clear previous errors
+    
+    console.log('Fetching group details for ID:', id); // Debug log
+    
+    const response = await fetch(`/api/auth/groups/${id}`);
+    const data = await response.json();
+    
+    console.log('API Response:', data); // Debug log
+    
+    if (response.ok && data.success) {
+      setGroup(data.group);
+    } else {
+      console.error('API Error:', data.message);
+      setError(data.message || 'Failed to fetch group details');
     }
-  };
+  } catch (error) {
+    console.error('Network error fetching group details:', error);
+    setError('Network error. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const copyGroupCode = async () => {
     if (!group) return;
@@ -134,7 +154,8 @@ export default function GroupDetailPage() {
 
     setIsSendingMessage(true);
     try {
-      const response = await fetch(`/api/groups/${groupId}/messages`, {
+      // Fix: Use the correct API endpoint path
+      const response = await fetch(`/api/auth/groups/${groupId}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -147,7 +168,7 @@ export default function GroupDetailPage() {
 
       const data = await response.json();
       
-      if (data.success) {
+      if (response.ok && data.success) {
         setNewMessage('');
         await fetchGroupDetails(groupId);
       } else {
@@ -161,9 +182,10 @@ export default function GroupDetailPage() {
     }
   };
 
-//   const isGroupCreator = () => {
-//     return user && group && group.createdBy._id === user.id;
-//   };
+  const isGroupMember = () => {
+    if (!user || !group) return false;
+    return group.members.some(member => member._id === user.id);
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -212,6 +234,28 @@ export default function GroupDetailPage() {
     );
   }
 
+  // Check if user is a member of the group
+  if (!isGroupMember()) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="bg-yellow-100 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <Users size={32} className="text-yellow-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Restricted</h2>
+          <p className="text-gray-600 mb-6">You need to be a member of this group to view its details.</p>
+          <Link
+            href="/discover"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-flex items-center space-x-2"
+          >
+            <ArrowLeft size={16} />
+            <span>Back to Groups</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <header className="bg-white shadow-sm border-b border-gray-100">
@@ -242,6 +286,14 @@ export default function GroupDetailPage() {
           </div>
         </div>
       </header>
+
+      {error && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-700">{error}</p>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-8">
@@ -477,4 +529,4 @@ export default function GroupDetailPage() {
       </div>
     </div>
   );
-}
+    }

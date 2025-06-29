@@ -2,33 +2,33 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/app/lib/mongodb';
 import { Db, ObjectId } from 'mongodb';
 
-interface GroupMember {
-  _id: string;
-  name: string;
-  email: string;
-  joinedAt?: string;
-}
+// interface GroupMember {
+//   _id: string;
+//   name: string;
+//   email: string;
+//   joinedAt?: string;
+// }
 
-interface GroupNote {
-  _id: string;
-  title: string;
-  uploadedBy: {
-    name: string;
-    email: string;
-  };
-  uploadedAt: string;
-  fileUrl?: string;
-}
+// interface GroupNote {
+//   _id: string;
+//   title: string;
+//   uploadedBy: {
+//     name: string;
+//     email: string;
+//   };
+//   uploadedAt: string;
+//   fileUrl?: string;
+// }
 
-interface GroupMessage {
-  _id: string;
-  message: string;
-  sender: {
-    name: string;
-    email: string;
-  };
-  sentAt: string;
-}
+// interface GroupMessage {
+//   _id: string;
+//   message: string;
+//   sender: {
+//     name: string;
+//     email: string;
+//   };
+//   sentAt: string;
+// }
 
 export async function GET(
   request: NextRequest,
@@ -36,8 +36,11 @@ export async function GET(
 ) {
   try {
     const { id } = params;
+    
+    console.log('GET /api/auth/groups/[id] - ID received:', id); // Debug log
 
     if (!id || typeof id !== 'string') {
+      console.log('Invalid ID format:', id);
       return NextResponse.json(
         { success: false, message: 'Invalid group ID format' },
         { status: 400 }
@@ -45,6 +48,7 @@ export async function GET(
     }
 
     if (!ObjectId.isValid(id)) {
+      console.log('Invalid ObjectId:', id);
       return NextResponse.json(
         { success: false, message: 'Invalid group ID format' },
         { status: 400 }
