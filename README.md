@@ -1,91 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Study Group Connector
 
-## Getting Started
+> *“Connecting minds, one study group at a time.”*
 
-First, run the development server:
+**Study Group Connector** is a full-stack web application designed to bring learners together. It allows users to sign up, log in, create or join study groups, and collaborate with like-minded individuals. Built with React, Next.js, and MongoDB for a smooth, modern experience.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌐 Live Demo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[🔗 Click here to see it live](https://studygroup-plus.vercel.app/)  
+*(Replace with your actual deployed link)*
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ✨ Features
 
-To learn more about Next.js, take a look at the following resources:
+- 🔑 User authentication (Sign Up / Login)
+- 🏠 Landing page with app intro
+- 📋 Dashboard after login
+  - 👤 View & edit profile
+  - ➕ Create a new study group
+  - 🔍 Discover and join existing study groups
+- 🔁 Realtime group updates
+- 🔐 Protected routes and session handling
+- 🎨 Clean, responsive UI
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧰 Tech Stack
 
-## Deploy on Vercel
+**Frontend:**  
+- React.js (with Next.js framework)  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Backend & Database:**  
+- Node.js & Express (API routes via Next.js)
+- MongoDB with Mongoose
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Other Tools:**  
+- NextAuth.js (authentication)
+- GitHub (version control)
 
+---
 
-## Structure //Todo
+## 📸 Screenshots
 
-studygroup-plus/
-├── public/
-│   ├── images/
-│   └── icons/
-├── src/
-│   ├── app/
-│   │   ├── (auth)/
-│   │   │   ├── login/
-│   │   │   │   └── page.tsx // done 
-│   │   │   └── signup/
-│   │   │       └── page.tsx // done
-│   │   ├── dashboard/
-│   │   │   └── page.tsx
-│   │   ├── create/
-│   │   │   └── page.tsx
-│   │   ├── group/
-│   │   │   └── [id]/
-│   │   │       ├── page.tsx           ← group overview
-│   │   │       ├── notes/             ← notes tab
-│   │   │       ├── chat/              ← chat tab
-│   │   │       └── jam/               ← break / mini games
-│   │   ├── discover/
-│   │   │   └── page.tsx               ← discover all groups + filter by:
-│   │   │                               university / exam / topic
-│   │   ├── profile/
-│   │   │   └── page.tsx
-│   │   ├── api/
-│   │   │   ├── auth/
-│   │   │   │   ├── login/
-│   │   │   │   │   └── route.ts
-│   │   │   │   └── signup/
-│   │   │   │       └── route.ts
-│   │   │   └── groups/                ← future: group CRUD
-│   │   ├── globals.css
-│   │   ├── layout.tsx
-│   │   └── page.tsx                   ← landing page // for now done 
-│   ├── components/
-│   │   ├── ui/
-│   │   ├── auth/
-│   │   ├── dashboard/
-│   │   ├── group/
-│   │   └── common/                    // navbar done for now..
-│   ├── lib/
-│   │   ├── mongodb.ts                 ← MongoDB helper
-│   │   ├── auth.ts                    ← optional, e.g. JWT helpers
-│   │   └── utils.ts
-│   └── types/
-│       └── index.ts
-├── .env.local                          ← contains MONGODB_URI
-├── package.json
-└── README.md
+| Landing Page | Dashboard | Create/Join Group |
+|--------------|-----------|-------------------|
+| ![Landing](landingpage.png) | ![Dashboard](dashboard.png) | ![Create](creategroup.png) |
+
+| Sign In Page | Login | Discover Group |
+|--------------|-------|----------------|
+| ![Signin](signup.png) | ![Login](login.png) | ![Discover](discover.png)
+---
+## 🚀 Usage
+
+Once the project is set up and running locally:
+
+1. Visit `http://localhost:3000` in your browser.
+2. From the **Landing Page**, navigate to:
+   - 🔐 **Sign Up/Login** to create your account
+3. After login, access your **Dashboard**:
+   - 👤 View or update your profile
+   - ➕ Create a new study group with topic & description
+   - 🔍 Discover available groups and **Join** any you like
+4. All your joined groups will be listed in your dashboard for easy access.
+
+This app enables seamless group-based learning and discovery among students and professionals.
+
+---
+
+## 🤝 Contributing
+
+The Study Group Connector is a centralized platform designed to foster collaboration in educational environments by enabling students to form, join, and manage study groups effectively. This project contributes meaningfully to multiple stakeholders across the educational and tech ecosystems:
+
+🧑‍🎓 1. Students (Primary Users)
+The platform is built with students at its core, offering:
+
+Better Collaboration – Connects peers studying the same subjects.
+
+Peer Learning – Encourages mutual academic support and knowledge sharing.
+
+Time Management – Simplifies the scheduling of study sessions.
+
+Social Interaction – Reduces isolation, especially in remote/hybrid setups.
+
+🏫 2. Educational Institutions
+Institutions benefit from:
+
+Improved Student Engagement – Promotes active participation and self-initiative.
+
+Performance Tracking (if integrated) – Enables faculty to monitor group interactions.
+
+Reduced Academic Gaps – Assists weaker students through group learning.
+
+👩‍🏫 3. Faculty and Mentors
+While optionally involved, educators gain:
+
+Insight into Learning Trends – Observe group topics and engagement.
+
+Group-Level Feedback – Facilitate discussions or monitor group outcomes.
+
+Behavioral & Learning Patterns – Understand how students collaborate.
+
+👨‍💻 4. Developers and Contributors
+On the GitHub side, the project contributes to:
+
+Open Source Community – Sharing reusable code and clean architecture.
+
+Collaborative Development – Encouraging student coders to learn Git, GitHub, React, TypeScript, and MongoDB in real-world settings.
+
+Portfolio Building – Contributors gain hands-on experience and public recognition for their work.
+
+📚 5. Academic Outcomes
+The Study Group Connector enhances learning outcomes by:
+
+Increasing Retention & Motivation – Group environments keep learners engaged.
+
+Improving Exam Readiness – Group study helps reinforce core concepts.
+
+Encouraging Collaborative Thinking – Develops skills essential for both academics and the workforce.
+
+🧠 6. Technical Ecosystem
+Technically, the project contributes to:
+
+Education + Technology Integration – Demonstrates how modern stacks solve real-world academic problems.
+
+Modular, Scalable Design – Acts as a model for future ed-tech projects.
+
+Community Innovation – Opens possibilities for features like gamification, AI-based suggestions, and more.
+
+---
+
+## 🌟 Final Thoughts
+
+The Study Group Connector is more than just a platform — it’s a collaborative effort to reshape how students learn and connect. By combining educational purpose with open-source development, it bridges the gap between technology and academic growth.
+
+Whether you're a student looking to contribute ideas, a developer eager to build real-world skills, or an educator exploring new engagement tools — there's a place for you here.
+
+**We welcome contributions, feedback, and fresh perspectives. Let's build better learning experiences together. 🤝**
