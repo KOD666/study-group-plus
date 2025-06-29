@@ -41,6 +41,7 @@ export async function POST(
 
     const db: Db = await getDatabase();
 
+    // Check if group exists and user is a member
     const group = await db.collection('groups').findOne({
       _id: new ObjectId(id),
       isActive: true,
@@ -54,6 +55,7 @@ export async function POST(
       );
     }
 
+    // Check if user exists
     const user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
 
     if (!user) {
@@ -63,6 +65,7 @@ export async function POST(
       );
     }
 
+    // Create message document
     const messageDocument = {
       groupId: new ObjectId(id),
       message: message.trim(),
@@ -75,6 +78,7 @@ export async function POST(
       isDeleted: false
     };
 
+    // Insert message
     const result = await db.collection('messages').insertOne(messageDocument);
 
     if (!result.insertedId) {
@@ -84,6 +88,7 @@ export async function POST(
       );
     }
 
+    // Update group's updatedAt timestamp
     await db.collection('groups').updateOne(
       { _id: new ObjectId(id) },
       { $set: { updatedAt: new Date().toISOString() } }
@@ -131,6 +136,7 @@ export async function GET(
 
     const db: Db = await getDatabase();
 
+    // Check if group exists and user is a member
     const group = await db.collection('groups').findOne({
       _id: new ObjectId(id),
       isActive: true,
@@ -146,6 +152,7 @@ export async function GET(
 
     const skip = (page - 1) * limit;
 
+    // Fetch messages with pagination
     const messages = await db.collection('messages')
       .find({
         groupId: new ObjectId(id),
@@ -156,11 +163,13 @@ export async function GET(
       .limit(limit)
       .toArray();
 
+    // Get total count for pagination
     const totalMessages = await db.collection('messages').countDocuments({
       groupId: new ObjectId(id),
       isDeleted: false
     });
 
+    // Transform messages (reverse to show chronological order)
     const transformedMessages = messages.reverse().map(msg => ({
       _id: msg._id.toString(),
       message: msg.message,
@@ -214,6 +223,7 @@ export async function DELETE(
 
     const db: Db = await getDatabase();
 
+    // Check if group exists and user is a member
     const group = await db.collection('groups').findOne({
       _id: new ObjectId(id),
       isActive: true,
@@ -227,6 +237,7 @@ export async function DELETE(
       );
     }
 
+    // Check if message exists
     const message = await db.collection('messages').findOne({
       _id: new ObjectId(messageId),
       groupId: new ObjectId(id)
@@ -239,6 +250,7 @@ export async function DELETE(
       );
     }
 
+    // Check if user can delete (sender or group creator)
     const canDelete = message.sender._id === userId || group.createdBy === userId;
 
     if (!canDelete) {
@@ -248,6 +260,7 @@ export async function DELETE(
       );
     }
 
+    // Soft delete the message
     const result = await db.collection('messages').updateOne(
       { _id: new ObjectId(messageId) },
       { 
@@ -278,11 +291,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-}
-
-export async function PUT() {
-  return NextResponse.json(
-    { success: false, message: 'Method not allowed' },
-    { status: 405 }
-  );
 }

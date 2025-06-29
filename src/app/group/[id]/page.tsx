@@ -73,69 +73,63 @@ export default function GroupDetailPage() {
   const params = useParams();
   const groupId = params?.id as string;
 
-
   useEffect(() => {
-  const checkAuth = () => {
-    // Prevent SSR issues
-    if (typeof window === 'undefined') return;
-    
-    try {
-      const isAuthenticated = localStorage.getItem('isAuthenticated');
-      const userData = localStorage.getItem('user');
+    const checkAuth = () => {
+      // Prevent SSR issues
+      if (typeof window === 'undefined') return;
       
-      if (!isAuthenticated || !userData) {
+      try {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const userData = localStorage.getItem('user');
+        
+        if (!isAuthenticated || !userData) {
+          router.push('/login');
+          return;
+        }
+
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        
+        if (groupId) {
+          fetchGroupDetails(groupId);
+        }
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        // Clear corrupted data
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('user');
         router.push('/login');
-        return;
       }
+    };
 
-      const parsedUser = JSON.parse(userData);
-      setUser(parsedUser);
-      
-      if (groupId) {
-        fetchGroupDetails(groupId);
-      }
-    } catch (error) {
-      console.error('Error parsing user data:', error);
-      // Clear corrupted data
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('user');
-      router.push('/login');
-    }
-  };
-
-  checkAuth();
-}, [router, groupId]);
+    checkAuth();
+  }, [router, groupId]);
 
   const fetchGroupDetails = async (id: string) => {
     try {
       setIsLoading(true);
-      setError(''); // Clear previous errors
+      setError('');
       
-      const fetchGroupDetails = async (id: string) => {
-  try {
-    setIsLoading(true);
-    setError(''); // Clear previous errors
-    
-    console.log('Fetching group details for ID:', id); // Debug log
-    
-    const response = await fetch(`/api/auth/groups/${id}`);
-    const data = await response.json();
-    
-    console.log('API Response:', data); // Debug log
-    
-    if (response.ok && data.success) {
-      setGroup(data.group);
-    } else {
-      console.error('API Error:', data.message);
-      setError(data.message || 'Failed to fetch group details');
+      console.log('Fetching group details for ID:', id);
+      
+      const response = await fetch(`/api/auth/groups/${id}`);
+      const data = await response.json();
+      
+      console.log('API Response:', data);
+      
+      if (response.ok && data.success) {
+        setGroup(data.group);
+      } else {
+        console.error('API Error:', data.message);
+        setError(data.message || 'Failed to fetch group details');
+      }
+    } catch (error) {
+      console.error('Network error fetching group details:', error);
+      setError('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.error('Network error fetching group details:', error);
-    setError('Network error. Please try again.');
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   const copyGroupCode = async () => {
     if (!group) return;
@@ -154,7 +148,6 @@ export default function GroupDetailPage() {
 
     setIsSendingMessage(true);
     try {
-      // Fix: Use the correct API endpoint path
       const response = await fetch(`/api/auth/groups/${groupId}/messages`, {
         method: 'POST',
         headers: {
@@ -529,4 +522,4 @@ export default function GroupDetailPage() {
       </div>
     </div>
   );
-    }
+}
