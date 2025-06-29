@@ -148,7 +148,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -185,7 +184,6 @@ export default function Dashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
             Welcome back, {user.name}! 👋
@@ -199,9 +197,7 @@ export default function Dashboard() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* Create Group CTA */}
             <div className="mb-8">
               <Link
                 href="/create"
@@ -217,7 +213,6 @@ export default function Dashboard() {
               </Link>
             </div>
 
-            {/* My Groups Section */}
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">My Study Groups</h2>
               
@@ -308,9 +303,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6">
-            {/* Profile Card */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center space-x-4 mb-4">
                 <div className="bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full p-3 shadow-lg">
@@ -329,7 +322,6 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Join Group */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Join a Group</h3>
               
@@ -357,20 +349,19 @@ export default function Dashboard() {
                     onChange={(e) => setJoinCode(e.target.value)}
                     placeholder="Enter group code"
                     disabled={isJoining}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50"
+                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 text-gray-900 bg-white placeholder-gray-500"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={isJoining || !joinCode.trim()}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                 >
                   {isJoining ? 'Joining...' : 'Join Group'}
                 </button>
               </form>
             </div>
 
-            {/* Quick Actions */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-3">

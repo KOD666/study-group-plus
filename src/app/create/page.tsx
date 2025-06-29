@@ -119,7 +119,6 @@ export default function CreateGroup() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -142,7 +141,6 @@ export default function CreateGroup() {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
         <div className="text-center mb-8">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center shadow-lg">
             <Plus className="text-white" size={32} />
@@ -172,7 +170,6 @@ export default function CreateGroup() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Group Title */}
               <div>
                 <label htmlFor="title" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
                   <BookOpen size={16} />
@@ -186,12 +183,11 @@ export default function CreateGroup() {
                   onChange={handleInputChange}
                   placeholder="e.g., Advanced Calculus Study Group"
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 bg-white placeholder-gray-500"
                   required
                 />
               </div>
 
-              {/* Subject */}
               <div>
                 <label htmlFor="subject" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
                   <BookOpen size={16} />
@@ -205,12 +201,11 @@ export default function CreateGroup() {
                   onChange={handleInputChange}
                   placeholder="e.g., Mathematics, Physics, Computer Science"
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 bg-white placeholder-gray-500"
                   required
                 />
               </div>
 
-              {/* Tags */}
               <div>
                 <label htmlFor="tags" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
                   <Tag size={16} />
@@ -224,14 +219,13 @@ export default function CreateGroup() {
                   onChange={handleInputChange}
                   placeholder="e.g., calculus, derivatives, limits (separate with commas)"
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 bg-white placeholder-gray-500"
                 />
                 <p className="text-xs text-gray-500 mt-2">
                   Add relevant tags to help others discover your group
                 </p>
               </div>
 
-              {/* Description */}
               <div>
                 <label htmlFor="description" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
                   <FileText size={16} />
@@ -245,14 +239,13 @@ export default function CreateGroup() {
                   placeholder="Describe your study group, meeting schedule, goals, or any other relevant information..."
                   disabled={isSubmitting}
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed resize-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed resize-none text-gray-900 bg-white placeholder-gray-500"
                 />
                 <p className="text-xs text-gray-500 mt-2">
                   Include meeting times, study goals, or any group guidelines
                 </p>
               </div>
 
-              {/* Submit Button */}
               <div className="pt-6">
                 <button
                   type="submit"
@@ -275,7 +268,6 @@ export default function CreateGroup() {
             </form>
           </div>
 
-          {/* Tips Section */}
           <div className="mt-8 bg-blue-50 rounded-2xl p-6 border border-blue-100">
             <h3 className="text-lg font-semibold text-blue-900 mb-3">
               💡 Tips for a Successful Study Group
@@ -284,8 +276,6 @@ export default function CreateGroup() {
               <li>• Choose a clear, descriptive title that reflects your subject</li>
               <li>• Add relevant tags to help classmates find your group</li>
               <li>• Include meeting schedule and study goals in the description</li>
-              <li>• Set clear expectations for group participation</li>
-              <li>• Share your group code with trusted classmates</li>
             </ul>
           </div>
         </div>

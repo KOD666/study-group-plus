@@ -503,7 +503,7 @@ export default function GroupDetailPage() {
                       }
                     }}
                     placeholder="Type your message..."
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white placeholder-gray-500"
                     disabled={isSendingMessage}
                   />
                   <button
@@ -516,6 +516,7 @@ export default function GroupDetailPage() {
                   </button>
                 </div>
               </div>
+              
             </div>
           </div>
         </div>
